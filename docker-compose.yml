@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  ipfs-metadata:
+    container_name: metadata.ipfs
+    image: ipfs-docker:latest
+    # ports:
+    #   - '8889:8889'
+    #   - '8084:8084'
+    command: tail -f /dev/null
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    # environment:
+      # EOSIO_HOST: http://eosio:8888
+
+    volumes:
+      - ipfs-data-volume:/root/data-dir
+    labels:
+      kompose.volume.size: 500Gi
+      kompose.service.type: loadbalancer
+    networks:
+      default:
+        aliases:
+          - metadata.ipfs
+
+volumes:
+  ipfs-data-volume:
+    external: true
+
+networks:
+  default:
